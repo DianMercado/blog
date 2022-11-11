@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 use App\Trainer;
+use PDF;
 
 class TrainerContrller extends Controller
 {
@@ -16,7 +18,7 @@ class TrainerContrller extends Controller
     public function index()
     {
         $trainers=Trainer::all();
-        return view('index', compact('trainers'));//
+        return view( "index",compact("trainers"));
     }
 
     /**
@@ -26,8 +28,9 @@ class TrainerContrller extends Controller
      */
     public function create()
     {
-        return view('create');//
+        return view("create");
     }
+        //
 
     /**
      * Store a newly created resource in storage.
@@ -38,27 +41,29 @@ class TrainerContrller extends Controller
     public function store(Request $request)
     {
         //return $request->all();
-        //return $request->input('name');
-        /**$trainer=new Trainer();
-        $trainer->name=$request->input('name');
-        $trainer->Apellido=$request->input('Apellido');
-        $trainer->Avatar=$request->input('Avatar');
-        $trainer->save();
-        return 'Guardado';**/
-        if($request->hasFile('Avatar')){
-            $file=$request->file('Avatar');
+        //return $request->input("name");
+        //$trainer = new Trainer();
+        //$trainer->name=$request->input("name");
+        //$trainer->apellido=$request->input("apellido");
+        //$trainer->avatar=$request->input("avatar");
+        //$trainer->save();
+        //return "Guardado";
+
+        if ($request->hasFile("avatar")) {
+            $file=$request->file("avatar");
             $name=time().$file->getClientOriginalName();
-            $file->move(public_path().'/images/',$name);
-            $trainer=new Trainer();
-            $trainer->name=$request->input('name');
-            $trainer->Apellido=$request->input('Apellido');
+            $file->move(public_path( )."/images/",$name);
+
+            $trainer = new Trainer();
+            $trainer->name=$request->input("name");
+            $trainer->apellido=$request->input("apellido");
+
             $trainer->avatar=$name;
             $trainer->save();
-            return 'Guardado';
-        }
-        
-    }
+            return "Guardado";
 
+    }
+    }
     /**
      * Display the specified resource.
      *
@@ -67,11 +72,11 @@ class TrainerContrller extends Controller
      */
     public function show($id)
     {
-        //return view("show");//
-        $trainer=Trainer::find($id);
+        //return view("show");
+        //return "Tengo que regresar el id";
+        $trainer = Trainer::find($id);
         return view("show", compact("trainer"));
         //return $trainer;
-
     }
 
     /**
@@ -82,8 +87,8 @@ class TrainerContrller extends Controller
      */
     public function edit(Trainer $trainer)
     {
-       //return $trainer; //
-       return view('edit', compact('trainer'));
+        //return $trainer;
+        return view("edit",compact("trainer"));
     }
 
     /**
@@ -95,18 +100,18 @@ class TrainerContrller extends Controller
      */
     public function update(Request $request, Trainer $trainer)
     {
-        //return $trainer;//
-        $trainer->fill($request->except("Avatar"));
-        if ($request->hasFile("Avatar")){
-            $file = $request->file("Avatar");
+        //return $trainer;
+        //return $request;
+        $trainer->fill($request->except("avatar"));
+        if ($request->hasFile("avatar")){
+            $file = $request->file("avatar");
             $name = time().$file-> getClientOriginalName();
 
-            $trainer->Avatar=$name;
+            $trainer->avatar=$name;
             $file->move(public_path( ).'/images/',$name);
         }
         $trainer->save( );
         return redirect("trainers/");
-
     }
 
     /**
@@ -118,30 +123,37 @@ class TrainerContrller extends Controller
     public function destroy($id)
     {
         $trainer=Trainer::find($id);
-        if($trainer->delete($id))
+        if ($trainer->delete($id))
         {
-            //return redirect('trainers/');
-            if(file_exists('images/'.$data->Avatar) AND !empty($data->Avatar))
+            return redirect("trainers/");
+            $data = Trainer::FindOrFail($id);
+
+            if(file_exists("images/".$data->avatar) AND !empty($data->avatar))
             {
-                unlink('images/'.$data->Avatar);
+            unlink("images/".$data->avatar);
             }
-            try{
-                $data->delete();
-                $bug=0;
+                try{
+                    $data->delete();
+                    $bug = 0;
             }
             catch(\Exception $e){
-                $bug=$e->errorInfo[1];
+                $bug = $e->errorInfo[1];
             }
             if($bug==0){
-                echo "sucess";
+                echo "success";
+            }else{
+                echo "error";
             }
-            else{
-                echo "Error";
-            }
+        
         }
-        else return "El ".id. "No se pudo borrar";
-        $data=Trainer::FindOrFail($id);
+        else return "El ".$id. "No se pudo borrar";
+    
+}
 
-
+    public function pdf()
+    {
+        $trainers=Trainer::all();
+        $pdf = PDF::loadView('pdf.listado', compact('trainers'));
+        return $pdf->download('listado.pdf');
     }
 }

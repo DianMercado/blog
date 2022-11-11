@@ -13,35 +13,77 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//EJERCICIO 1
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/mi_primer_ruta', function () {
-    return "Hola Diana";
-});
-Route::get("/name/{name}", function($name){
-    return "Hola soy ".$name;
-});
-Route::get('/name/{name}/lastname/{lastname?}', function($name,$lastname){
-    return "Hola soy ".$name." ".$lastname;
+
+Route::get("/mi_primer_ruta",function(){
+    return "Hola Rocio";
 });
 
+Route::get("/name/{name}",function($name){
+    return "hola soy ".$name;
+});
 
-Route::get('/login', function(){
+Route::get("/name/{name}/lastname/{apellido}",
+function($name,$apellido){
+    return "hola soy ".$name." ".$apellido;
+});
+
+Route::get("name/{name}/lastname/{apellido?}",
+function($name,$apellido=null){
+    return "hola soy ".$name." ".$apellido;
+});
+
+Route::get("name/{name}/lastname/{apellido?}",
+function($name,$apellido="apellido"){
+    return "hola soy ".$name." ".$apellido;
+});
+
+Route::get("/1er/{num}/2do/{num2}",
+function($num,$num2){
+    $resultado=$num+$num2;
+    return "La suma es ".$resultado;
+});
+
+//EJERCICIO 2
+Route::get("/login",function(){
     return view("login");
 });
 
-Route::get('/rutaprueba', 'pruebaController@prueba2');
+//EJERCICIO 3
+Route::get("/logout",function(){
+    return "Logout Usuario";
+});
 
+//EJERCICIO 4
+Route::get("/catalog",function(){
+    return "Listado Peliculas";
+});
 
-Route::get('/catalog', 'catalogController@catalog1');
-Route::get('/show/{id}', 'catalogController@show');
-Route::get('/create', 'catalogController@create');
-Route::get('/edit/{id}', 'catalogController@edit');
+//EJERCICIO 5
+Route::get("/catalog/show/{id}",
+function($id){
+    return "Vista Detalle Pelicula {id}";
+});
 
-Route::resource('/trainers','TrainerContrller');
+//EJERCICIO 6
+Route::get("/catalog/create",function(){
+    return "Añadir Pelicula";
+});
 
+//EJERCICIO 7
+Route::get("/catalog/edit/{id}",
+function($id){
+    return "Modificar Pelicula {id}";
+});
+
+Route::get("/rutaprueba","PruebaController@prueba2");
+
+Route::resource("/trainers","TrainerContrller");
+Route::get("delete/{id}","TrainerContrller@destroy");
+Route::get("descargar-entrenadores", 'TrainerContrller@pdf')->name('listado.pdf');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('delete/{id}', 'TrainerContrller@destroy');
