@@ -60,7 +60,7 @@ class TrainerContrller extends Controller
 
             $trainer->avatar=$name;
             $trainer->save();
-            return "Guardado";
+            return redirect("trainers/");
 
     }
     }
@@ -156,4 +156,5 @@ class TrainerContrller extends Controller
         $pdf = PDF::loadView('pdf.listado', compact('trainers'));
         return $pdf->download('listado.pdf');
     }
+
 }

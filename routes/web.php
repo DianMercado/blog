@@ -19,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get("/mi_primer_ruta",function(){
-    return "Hola Rocio";
+    return "Hola Diana";
 });
 
 Route::get("/name/{name}",function($name){
@@ -87,3 +87,6 @@ Route::get("descargar-entrenadores", 'TrainerContrller@pdf')->name('listado.pdf'
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource("/search","Api\SearchController");
+Route::get("/search1",['uses'=>"Api\SearchController@buscar","as"=>"Buscar"]);

@@ -7,9 +7,8 @@
     <h5 class="text-center">{{$trainer->name}}</h5>
     <h5 class="text-center">{{$trainer->Apellido}}</h5>
     <div class="text-center">
-        <p>Some quick example text to...</p>
-        <a href="/delete/{{$trainer->id}}" class="btn btn-primary">Delete</a>
-        <a href="/trainers/{{$trainer->id}}/edit" class="btn btn-secondary">Editar...</a>
-        <a href="{{route('listado.pdf')}}" class="btn btn-sm btn-primary"> Descargar Entrenadores en PDF</a>
+        
+        <a href="/delete/{{$trainer->id}}" class="btn btn-primary">Editar</a>
+        <a href="/trainers/{{$trainer->id}}/edit" class="btn btn-secondary">Borrar</a>
     </div>
 @endsection

@@ -164,6 +164,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
 
 
         /*
